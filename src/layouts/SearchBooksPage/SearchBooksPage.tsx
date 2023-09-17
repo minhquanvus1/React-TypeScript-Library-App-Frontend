@@ -80,9 +80,9 @@ export const SearchBooksPage = () => {
     }
   };
 
-  const indexOfLastBook = currentPage * booksPerPage;
-  const indexOfFirstBook = indexOfLastBook - booksPerPage;
-  let lastItem =
+  const indexOfLastBook: number = currentPage * booksPerPage;
+  const indexOfFirstBook: number = indexOfLastBook - booksPerPage;
+  let lastItem: number =
     booksPerPage * currentPage <= totalAmountOfBooks
       ? booksPerPage * currentPage
       : totalAmountOfBooks;
