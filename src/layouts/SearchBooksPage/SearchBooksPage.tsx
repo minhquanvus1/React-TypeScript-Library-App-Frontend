@@ -21,7 +21,7 @@ export const SearchBooksPage = () => {
       let url: string = "";
 
       if (searchUrl === "") {
-        url = `${baseUrl}?page=0&size=${booksPerPage}`;
+        url = `${baseUrl}?page=${currentPage - 1}&size=${booksPerPage}`;
       } else {
         url = baseUrl + searchUrl;
       }
