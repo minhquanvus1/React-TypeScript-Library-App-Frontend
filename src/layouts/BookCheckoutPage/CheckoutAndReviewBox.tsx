@@ -6,7 +6,29 @@ export const CheckoutAndReviewBox: React.FC<{
   book: BookModel | undefined;
   mobile: boolean;
   currentLoansCount: number;
+  isAuthenticated: any;
+  isCheckedOut: boolean;
 }> = (props) => {
+  function buttonRender() {
+    if (props.isAuthenticated) {
+      if (!props.isCheckedOut && props.currentLoansCount < 5) {
+        return <button className="btn btn-success btn-lg">Check out</button>;
+      } else if (!props.isCheckedOut) {
+        return <p className="text-danger">Too may books checked out</p>;
+      } else if (props.isCheckedOut) {
+        return (
+          <p>
+            <strong>Book checked out. Enjoy!</strong>
+          </p>
+        );
+      }
+    }
+    return (
+      <Link to="/login" className="btn btn-success btn-lg">
+        Sign in
+      </Link>
+    );
+  }
   return (
     <div
       className={
@@ -39,7 +61,7 @@ export const CheckoutAndReviewBox: React.FC<{
           </div>
         </div>
         <Link to="/#" className="btn btn-success btn-lg">
-          Sign in
+          {buttonRender()}
         </Link>
         <hr />
         <p className="mt-3">
