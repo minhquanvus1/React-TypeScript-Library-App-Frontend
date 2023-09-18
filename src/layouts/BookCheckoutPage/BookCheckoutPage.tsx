@@ -102,14 +102,35 @@ export const BookCheckoutPage = () => {
   }, []);
 
   useEffect(() => {
-    const fetchUserCurrentLoansCount = async () => {};
+    const fetchUserCurrentLoansCount = async () => {
+      // ONLY authenticated user can call this API endpoint
+      if (authState && authState.isAuthenticated) {
+        const url: string = `http://localhost:8080/api/books/secure/currentloans/count`;
+        const requestOptions = {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authState.accessToken?.accessToken}`, // get access token once the user has successfully logged in
+            "Content-Type": "application/json",
+          },
+        };
+
+        const currentLoansCountResponse = await fetch(url, requestOptions); // also pass in the requestOptions, because the API endpoint is secure, and requires a valid access token so that this user can call the API
+        if (!currentLoansCountResponse.ok) {
+          throw new Error("Something went wrong!");
+        }
+        const currentLoansCountResponseJson =
+          await currentLoansCountResponse.json();
+        setCurrentLoansCount(currentLoansCountResponseJson);
+      }
+      setIsLoadingCurrentLoansCount(false);
+    };
     fetchUserCurrentLoansCount().catch((error: any) => {
       setIsLoadingCurrentLoansCount(false);
       setHttpError(error.message);
     });
   }, [authState]);
 
-  if (isLoading || isLoadingReview) {
+  if (isLoading || isLoadingReview || isLoadingCurrentLoansCount) {
     return <SpinnerLoading />;
   }
 
@@ -145,7 +166,11 @@ export const BookCheckoutPage = () => {
               <StarsReview rating={totalStars} size={32} />
             </div>
           </div>
-          <CheckoutAndReviewBox book={book} mobile={false} />
+          <CheckoutAndReviewBox
+            book={book}
+            mobile={false}
+            currentLoansCount={currentLoansCount}
+          />
         </div>
         <hr />
         <LatestReviews reviews={reviews} bookId={book?.id} mobile={false} />
@@ -171,7 +196,11 @@ export const BookCheckoutPage = () => {
             <StarsReview rating={totalStars} size={32} />
           </div>
         </div>
-        <CheckoutAndReviewBox book={book} mobile={true} />
+        <CheckoutAndReviewBox
+          book={book}
+          mobile={true}
+          currentLoansCount={currentLoansCount}
+        />
         <hr />
         <LatestReviews reviews={reviews} bookId={book?.id} mobile={true} />
       </div>
