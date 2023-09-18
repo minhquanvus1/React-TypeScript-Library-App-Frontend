@@ -24,7 +24,7 @@ export const ReviewListPage = () => {
       // add "page", and "size" to support Pagination in the list of Reviews --> the returned response will have a "page" object
       const reviewUrl: string = `http://localhost:8080/api/reviews/search/findByBookId?bookId=${bookId}&page=${
         currentPage - 1
-      }&size={reviewsPerPage}`;
+      }&size=${reviewsPerPage}`;
       const responseReviews = await fetch(reviewUrl);
       if (!responseReviews.ok) {
         throw new Error("Something went wrong!");
