@@ -1,6 +1,5 @@
 import {Redirect} from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
-import { log } from 'console';
 import { SpinnerLoading } from '../layouts/utils/SpinnerLoading';
 import OktaLogInWidget from './OktaLogInWidget';
 
