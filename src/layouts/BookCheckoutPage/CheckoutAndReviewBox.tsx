@@ -8,11 +8,19 @@ export const CheckoutAndReviewBox: React.FC<{
   currentLoansCount: number;
   isAuthenticated: any;
   isCheckedOut: boolean;
+  checkoutBook: any;
 }> = (props) => {
   function buttonRender() {
     if (props.isAuthenticated) {
       if (!props.isCheckedOut && props.currentLoansCount < 5) {
-        return <button className="btn btn-success btn-lg">Check out</button>;
+        return (
+          <button
+            className="btn btn-success btn-lg"
+            onClick={() => props.checkoutBook()}
+          >
+            Check out
+          </button>
+        );
       } else if (!props.isCheckedOut) {
         return <p className="text-danger">Too may books checked out</p>;
       } else if (props.isCheckedOut) {
@@ -60,9 +68,9 @@ export const CheckoutAndReviewBox: React.FC<{
             </p>
           </div>
         </div>
-        <Link to="/#" className="btn btn-success btn-lg">
-          {buttonRender()}
-        </Link>
+
+        {buttonRender()}
+
         <hr />
         <p className="mt-3">
           This number can change until placing order has been complete.
