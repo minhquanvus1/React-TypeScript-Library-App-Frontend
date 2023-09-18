@@ -19,6 +19,9 @@ export const BookCheckoutPage = () => {
   const [reviews, setReviews] = useState<ReviewModel[]>([]);
   const [totalStars, setTotalStars] = useState(0);
   const [isLoadingReview, setIsLoadingReview] = useState(true);
+  // check if a particular user has left a review for this particular book yet
+  const [isReviewLeft, setIsReviewLeft] = useState(false);
+  const [isLoadingUserReview, setIsLoadingUserReview] = useState(true);
 
   // Loan counts states
   const [currentLoansCount, setCurrentLoansCount] = useState(0);
@@ -106,6 +109,14 @@ export const BookCheckoutPage = () => {
   }, []);
 
   useEffect(() => {
+    const fetchUserReviewBook = async () => {};
+    fetchUserReviewBook().catch((error: any) => {
+      setIsLoadingUserReview(false);
+      setHttpError(error.message);
+    });
+  }, [authState]);
+
+  useEffect(() => {
     const fetchUserCurrentLoansCount = async () => {
       // ONLY authenticated user can call this API endpoint
       if (authState && authState.isAuthenticated) {
@@ -164,7 +175,8 @@ export const BookCheckoutPage = () => {
     isLoading ||
     isLoadingReview ||
     isLoadingCurrentLoansCount ||
-    isLoadingBookCheckedOut
+    isLoadingBookCheckedOut ||
+    isLoadingUserReview
   ) {
     return <SpinnerLoading />;
   }
