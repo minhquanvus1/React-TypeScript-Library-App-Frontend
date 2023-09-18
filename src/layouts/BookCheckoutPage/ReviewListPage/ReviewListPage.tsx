@@ -70,5 +70,17 @@ export const ReviewListPage = () => {
           </div>
         );
       }
+
+      // find index of the last review in the current page (given a particular reviewsPerPage) (1-based index)
+      const indexOfLastReview: number = currentPage * reviewsPerPage;
+
+     // find index of the first review in the current page (given a particular reviewsPerPage) (0-based index)
+      const indexOfFirstReview: number = indexOfLastReview - reviewsPerPage;
+
+      let lastItem: number = currentPage * reviewsPerPage <= totalAmountOfReviews ? currentPage * reviewsPerPage : totalAmountOfReviews;
+
+      const paginate = (pageNumber: number) => {
+setCurrentPage(pageNumber);
+      }
     return ();
 }
