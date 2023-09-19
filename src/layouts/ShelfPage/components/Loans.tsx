@@ -43,7 +43,7 @@ export const Loans = () => {
       setHttpError(error.message);
     });
     window.scrollTo(0, 0); // move to the top of the page, every time this useEffect is called
-  }, [authState, checkout]); // this useEffect is called, every time authState changes, which is when the user logs in or logs out. And, this useEffect is also called, every time the "checkout" state variable changes, that is when the user returns a book (the useEffect will be called to fetch the latest current loans of the user).
+  }, [authState, checkout]); // this useEffect is called, every time authState changes, which is when the user logs in or logs out. And, this useEffect is also called, every time the "checkout" state variable changes, that is when the user returns a book (the useEffect will be called to fetch the latest current loans of the user) (the book's image in the Loan UI disappear once clicking the return button, is because this useEffect will be called to fetch the latest loan from database, but we've deleted this checkout for this book --> this book isn't in the checkout table anymore to be fetched --> it will be disappear once clicking the return button of it).
 
   if (isLoadingUserLoans) {
     return <SpinnerLoading />;
