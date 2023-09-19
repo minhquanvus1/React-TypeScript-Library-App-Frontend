@@ -4,6 +4,7 @@ import { ShelfCurrentLoans } from "../../../models/ShelfCurrentLoans";
 export const LoansModal: React.FC<{
   shelfCurrentLoan: ShelfCurrentLoans;
   mobile: boolean;
+  returnBook: any;
 }> = (props) => {
   return (
     <div
@@ -77,6 +78,9 @@ export const LoansModal: React.FC<{
                     data-bs-dismiss="modal"
                     className="list-group-item list-group-item-action"
                     aria-current="true"
+                    onClick={() =>
+                      props.returnBook(props.shelfCurrentLoan.book.id)
+                    }
                   >
                     Return Book
                   </button>
