@@ -38,6 +38,14 @@ export const Navbar = () => {
                   Search books
                 </NavLink>
               </li>
+              {/* ONLY authenticated user can see this nav item to ShelfPage */}
+              {authState.isAuthenticated && (
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/shelf">
+                    Shelf Page
+                  </NavLink>
+                </li>
+              )}
             </ul>
             <ul className="navbar-nav ms-auto">
               {/* if user is NOT authenticated, then show Sign in button, else show
