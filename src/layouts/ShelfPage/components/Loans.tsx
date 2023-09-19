@@ -71,6 +71,22 @@ export const Loans = () => {
     }
     setCheckout(!checkout); // this will trigger the useEffect to fetch the user's latest current loans
   }
+
+  async function renewLoan(bookId: number) {
+    const url: string = `http://localhost:8080/api/books/secure/renew/loan?bookId=${bookId}`;
+    const requestOptions = {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+        "Content-Type": "application/json",
+      },
+    };
+    const returnResponse = await fetch(url, requestOptions);
+    if (!returnResponse.ok) {
+      throw new Error("Something went wrong");
+    }
+    setCheckout(!checkout); // this will trigger the useEffect to fetch the user's latest current loans (in this case of renew book, the book's image in the Loan UI won't disappear once clicking the renew button, because the book is still in the checkout table to be fetched, but the due date will be updated to 7 more days from today)
+  }
   return (
     <div>
       {/* Desktop */}
@@ -150,6 +166,7 @@ export const Loans = () => {
                   shelfCurrentLoan={shelfCurrentLoan}
                   mobile={false}
                   returnBook={returnBook}
+                  renewLoan={renewLoan}
                 />
               </div>
             ))}
@@ -239,6 +256,7 @@ export const Loans = () => {
                   shelfCurrentLoan={shelfCurrentLoan}
                   mobile={true}
                   returnBook={returnBook}
+                  renewLoan={renewLoan}
                 />
               </div>
             ))}

@@ -5,6 +5,7 @@ export const LoansModal: React.FC<{
   shelfCurrentLoan: ShelfCurrentLoans;
   mobile: boolean;
   returnBook: any;
+  renewLoan: any;
 }> = (props) => {
   return (
     <div
@@ -85,6 +86,11 @@ export const LoansModal: React.FC<{
                     Return Book
                   </button>
                   <button
+                    onClick={
+                      props.shelfCurrentLoan.daysLeft < 0
+                        ? (event) => event.preventDefault() // if past due, prevent click (clicking this button does not have any effect)
+                        : () => props.renewLoan(props.shelfCurrentLoan.book.id) // if not past due, renew loan is allowed, and trigger the renewLoan(bookId) function
+                    }
                     data-bs-dismiss="modal"
                     className={
                       props.shelfCurrentLoan.daysLeft < 0
