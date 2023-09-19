@@ -4,6 +4,7 @@ import { ShelfCurrentLoans } from "../../../models/ShelfCurrentLoans";
 import { error } from "console";
 import { SpinnerLoading } from "../../utils/SpinnerLoading";
 import { Link } from "react-router-dom";
+import { LoansModal } from "./LoansModal";
 
 export const Loans = () => {
   const { authState } = useOktaAuth();
@@ -128,6 +129,10 @@ export const Loans = () => {
                   </div>
                 </div>
                 <hr />
+                <LoansModal
+                  shelfCurrentLoan={shelfCurrentLoan}
+                  mobile={false}
+                />
               </div>
             ))}
           </>
@@ -212,6 +217,7 @@ export const Loans = () => {
                 </div>
 
                 <hr />
+                <LoansModal shelfCurrentLoan={shelfCurrentLoan} mobile={true} />
               </div>
             ))}
           </>
