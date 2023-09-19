@@ -3,25 +3,40 @@ import React from "react";
 export const StarsReview: React.FC<{ rating: number; size: number }> = (
   props
 ) => {
-  let rating: number = props.rating;
-  let fullStars: number = 0;
-  let halfStars: number = 0;
-  let emptyStars: number = 0;
+  //   let rating: number = props.rating;
+  //   let fullStars: number = 0;
+  //   let halfStars: number = 0;
+  //   let emptyStars: number = 0;
 
-  if (rating !== undefined && rating > 0 && rating <= 5) {
-    for (let i = 0; i <= 4; i++) {
-      if (rating >= 1) {
-        fullStars++;
-        rating--;
-      } else if (rating === 0.5) {
-        halfStars++;
-        rating -= 0.5;
-      } else if (rating === 0) {
-        emptyStars++;
-      } else {
-        break;
-      }
+  //   if (rating !== undefined && rating > 0 && rating <= 5) {
+  //     for (let i = 0; i <= 4; i++) {
+  //       if (rating >= 1) {
+  //         fullStars++;
+  //         rating--;
+  //       } else if (rating === 0.5) {
+  //         halfStars++;
+  //         rating -= 0.5;
+  //       } else if (rating === 0) {
+  //         emptyStars++;
+  //       } else {
+  //         break;
+  //       }
+  //     }
+  //   } else {
+  //     emptyStars = 5;
+  //   }
+
+  // another way to do it
+  let rating: number = props.rating;
+  let fullStars: number = Math.floor(rating); // lam tron xuong fullStars (1.5 -> 1, 2.5 -> 2)
+  let halfStars: number = 0; // initialize halfStars = 0
+  let emptyStars: number = 0; // initialize emptyStars = 0
+  // neu fullStars (da dc lam tron xuong) < rating (4 < 4.5) --> co 1 halfStar
+  if (rating != undefined && rating > 0 && rating <= 5) {
+    if (fullStars < rating) {
+      halfStars = 1;
     }
+    emptyStars = 5 - (fullStars + halfStars); // emptyStars la nhung stars con lai, sau khi da initialize fullStars va halfStars
   } else {
     emptyStars = 5;
   }
