@@ -1,5 +1,6 @@
 import { useOktaAuth } from "@okta/okta-react";
 import { useState } from "react";
+import { MessageModel } from "../../../models/MessageModel";
 
 export const PostNewMessage = () => {
   const { authState } = useOktaAuth();
@@ -7,6 +8,34 @@ export const PostNewMessage = () => {
   const [question, setQuestion] = useState("");
   const [displayWarning, setDisplayWarning] = useState(false);
   const [displaySuccess, setDisplaySuccess] = useState(false);
+
+  async function submitNewQuestion() {
+    const url: string = `http://localhost:8080/api/messages/secure/add/message`;
+    if (authState?.isAuthenticated && title !== "" && question !== "") {
+      const messageModel: MessageModel = new MessageModel(title, question);
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(messageModel),
+      };
+      const submitNewQuestionResponse = await fetch(url, requestOptions);
+      if (!submitNewQuestionResponse.ok) {
+        throw new Error("Something went wrong!");
+      }
+      // if the question is submitted successfully, then, clear the title and question fields, and display the success alert
+      setTitle("");
+      setQuestion("");
+      setDisplaySuccess(true);
+      setDisplayWarning(false);
+    } else {
+      // if the user has not filled out all the fields (title, and question), or not log in yet (not authenticated) when click the Submit Question button, then, display the warning alert
+      setDisplayWarning(true);
+      setDisplaySuccess(false);
+    }
+  }
 
   return (
     <div className="card mt-3">
@@ -46,7 +75,11 @@ export const PostNewMessage = () => {
             ></textarea>
           </div>
           <div>
-            <button type="button" className="btn btn-primary mt-3">
+            <button
+              type="button"
+              className="btn btn-primary mt-3"
+              onClick={submitNewQuestion}
+            >
               Submit Question
             </button>
           </div>
