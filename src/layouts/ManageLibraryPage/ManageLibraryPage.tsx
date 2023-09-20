@@ -1,5 +1,6 @@
 import { useOktaAuth } from "@okta/okta-react";
 import { useState } from "react";
+import { Redirect } from "react-router-dom";
 
 export const ManageLibraryPage = () => {
   const { authState } = useOktaAuth();
@@ -20,6 +21,12 @@ export const ManageLibraryPage = () => {
   function messagesClickFunction() {
     setChangeQuantityOfBooksClick(false);
     setMessagesClick(true);
+  }
+  // We want to: redirect non-admin authenticated user to the HomePage (ONLY authenticated admin user can go to this ManageLibraryPage)
+  // To do so, we need to check if the authenticated user is admin or not, by checking the userType claim in the accessToken
+  // If the userType claim is undefined (not admin), then, redirect the user to the HomePage
+  if (authState?.accessToken?.claims.userType === undefined) {
+    return <Redirect to="/home" />;
   }
   return (
     <div className="container">
