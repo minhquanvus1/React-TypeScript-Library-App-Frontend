@@ -6,6 +6,21 @@ export const ManageLibraryPage = () => {
   const [changeQuantityOfBooksClick, setChangeQuantityOfBooksClick] =
     useState(false);
   const [messagesClick, setMessagesClick] = useState(false);
+
+  function addBookClickFunction() {
+    setChangeQuantityOfBooksClick(false);
+    setMessagesClick(false);
+  }
+
+  function changeQuantityOfBooksClickFunction() {
+    setChangeQuantityOfBooksClick(true);
+    setMessagesClick(false);
+  }
+
+  function messagesClickFunction() {
+    setChangeQuantityOfBooksClick(false);
+    setMessagesClick(true);
+  }
   return (
     <div className="container">
       <div className="mt-5">
@@ -13,6 +28,7 @@ export const ManageLibraryPage = () => {
         <nav>
           <div className="nav nav-tabs" id="nav-tab" role="tablist">
             <button
+              onClick={addBookClickFunction}
               className="nav-link active"
               id="nav-add-book-tab"
               data-bs-toggle="tab"
@@ -25,6 +41,7 @@ export const ManageLibraryPage = () => {
               Add new book
             </button>
             <button
+              onClick={changeQuantityOfBooksClickFunction}
               className="nav-link"
               id="nav-quantity-tab"
               data-bs-toggle="tab"
@@ -37,6 +54,7 @@ export const ManageLibraryPage = () => {
               Change Quantity
             </button>
             <button
+              onClick={messagesClickFunction}
               className="nav-link"
               id="nav-messages-tab"
               data-bs-toggle="tab"
@@ -65,7 +83,7 @@ export const ManageLibraryPage = () => {
             role="tabpanel"
             aria-labelledby="nav-quantity-tab"
           >
-            Change Quantity
+            {changeQuantityOfBooksClick ? <>Change Quantity</> : <></>}
           </div>
           <div
             className="tab-pane fade"
@@ -73,7 +91,7 @@ export const ManageLibraryPage = () => {
             role="tabpanel"
             aria-labelledby="nav-messages-tab"
           >
-            Admin messages
+            {messagesClick ? <>Admin Messages</> : <></>}
           </div>
         </div>
       </div>
