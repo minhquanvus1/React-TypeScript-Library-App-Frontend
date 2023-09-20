@@ -1,4 +1,4 @@
-export class MessageMode {
+export class MessageModel {
 title: string;
 question: string;
 id?: number;
