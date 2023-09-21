@@ -1,9 +1,23 @@
 import React, { useState } from "react";
 import { MessageModel } from "../../../models/MessageModel";
 
-export const AdminMessage: React.FC<{ message: MessageModel }> = (props) => {
+export const AdminMessage: React.FC<{
+  message: MessageModel;
+  key: number | undefined;
+  submitAdminResponse: any;
+}> = (props) => {
   const [displayWarning, setDisplayWarning] = useState(false);
   const [response, setResponse] = useState("");
+
+  function submitResponseButton() {
+    // check if the message doesn't actually exist (doesn't have the id field), and the response field is not empty, then, submit the response to the database
+    if (props.message.id !== null && response !== "") {
+      props.submitAdminResponse(props.message.id, response);
+      setDisplayWarning(false);
+    } else {
+      setDisplayWarning(true); // if the message doesn't exist, or the response field is empty, then, display the warning alert
+    }
+  }
   return (
     <div key={props.message.id}>
       <div className="card mt-2 shadow p-3 bg-body rounded">
@@ -32,7 +46,11 @@ export const AdminMessage: React.FC<{ message: MessageModel }> = (props) => {
               ></textarea>
             </div>
             <div>
-              <button type="button" className="btn btn-primary mt-3">
+              <button
+                type="button"
+                className="btn btn-primary mt-3"
+                onClick={submitResponseButton}
+              >
                 Submit Response
               </button>
             </div>

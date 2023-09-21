@@ -4,6 +4,7 @@ import { MessageModel } from "../../../models/MessageModel";
 import { SpinnerLoading } from "../../utils/SpinnerLoading";
 import { Pagination } from "../../utils/Pagination";
 import { AdminMessage } from "./AdminMessage";
+import { AdminMessageRequest } from "../../../models/AdminMessageRequest";
 
 export const AdminMessages = () => {
   const { authState } = useOktaAuth();
@@ -19,6 +20,8 @@ export const AdminMessages = () => {
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+
+  const [btnSubmit, setBtnSubmit] = useState(false); // this is just a binary variable (only contains 2 states: true or false), and is used to trigger the useEffect below
 
   useEffect(() => {
     const fetchUserMessages = async () => {
@@ -41,7 +44,7 @@ export const AdminMessages = () => {
       setHttpError(error.message);
     });
     window.scrollTo(0, 0);
-  }, [authState, currentPage]);
+  }, [authState, currentPage, btnSubmit]); // this useEffect will be called again when btnSubmit state variable changes. So when the submit button is clicked, this will change the current state of btnSubmit state variable, and trigger this useEffect to run again to fetch the messages that have closed = false (didn't have admin response yet)
 
   if (isLoadingMessages) {
     return <SpinnerLoading />;
@@ -54,6 +57,32 @@ export const AdminMessages = () => {
       </div>
     );
   }
+
+  async function submitResponseToQuestion(id: number, response: string) {
+    const url: string = `http://localhost:8080/api/messages/secure/admin/message`;
+    if (
+      authState &&
+      authState.isAuthenticated &&
+      id !== null &&
+      response !== ""
+    ) {
+      const messageAdminRequestModel: AdminMessageRequest =
+        new AdminMessageRequest(id, response);
+      const requestOptions = {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${authState.accessToken?.accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(messageAdminRequestModel),
+      };
+      const messageAdminResponse = await fetch(url, requestOptions);
+      if (!messageAdminResponse.ok) {
+        throw new Error("Something went wrong!");
+      }
+      setBtnSubmit(!btnSubmit); // this will change the state of btnSubmit variable once the submit button is clicked
+    }
+  }
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
@@ -64,7 +93,11 @@ export const AdminMessages = () => {
           <h5>Pending Q/A: </h5>
           {messages.map((message) => (
             <>
-              <AdminMessage message={message} key={message.id} />
+              <AdminMessage
+                message={message}
+                key={message.id}
+                submitAdminResponse={submitResponseToQuestion}
+              />
             </>
           ))}
         </>
