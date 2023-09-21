@@ -1,4 +1,5 @@
 import { useOktaAuth } from "@okta/okta-react";
+import { log } from "console";
 import { useEffect, useState } from "react";
 
 export const AddNewBook = () => {
@@ -18,6 +19,29 @@ export const AddNewBook = () => {
 
   function categoryField(value: string) {
     setCategory(value);
+  }
+
+  async function base64ConversionForImage(e: any) {
+    if (e.target.files[0]) {
+      // do something here
+      getBase64(e.target.files[0]);
+    }
+  }
+
+  // this function is to read content of a file, and convert its content into base64 encoded string, or log into console the error if the reading operation is failed
+  function getBase64(file: any) {
+    let reader = new FileReader(); // a FileReader object allows our React application to asynchronously read contents of a file stored in our computer's storage
+    reader.readAsDataURL(file); // the readAsDataURL method is used to read the contents of the specified Blob or File
+
+    // here, after reading content of the file, we convert the content to base64 encoded string
+    // the onload property of the FileReader object is an event handler that is called when the reading operation is successfully completed
+    reader.onload = function () {
+      setSelectedImage(reader.result); // the result property of the FileReader object is the base64 encoded string of the file
+    };
+    // the onerror property of the FileReader object is an event handler that is called when the reading operation is failed
+    reader.onerror = function (error) {
+      console.log("Error: ", error);
+    };
   }
 
   useEffect(() => {
@@ -135,7 +159,7 @@ export const AddNewBook = () => {
                 value={copies}
               />
             </div>
-            <input type="file" />
+            <input type="file" onChange={(e) => base64ConversionForImage(e)} />
             <div>
               <button type="button" className="btn btn-primary mt-3">
                 Add Book
