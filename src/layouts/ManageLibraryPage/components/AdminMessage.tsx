@@ -5,7 +5,7 @@ export const AdminMessage: React.FC<{
   message: MessageModel;
   key: number | undefined;
   submitAdminResponse: any;
-}> = (props) => {
+}> = (props, key) => {
   const [displayWarning, setDisplayWarning] = useState(false);
   const [response, setResponse] = useState("");
 
