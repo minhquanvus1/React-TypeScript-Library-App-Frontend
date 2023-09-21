@@ -5,6 +5,7 @@ import { useOktaAuth } from "@okta/okta-react";
 export const ChangeQuantityOfBook: React.FC<{
   book: BookModel;
   key: number;
+  deleteBook: any;
 }> = (props, key) => {
   const [quantity, setQuantity] = useState(0);
   const [remaining, setRemaining] = useState(0);
@@ -57,6 +58,24 @@ export const ChangeQuantityOfBook: React.FC<{
     setQuantity(quantity - 1);
     setRemaining(remaining - 1);
   }
+
+  async function deleteBook() {
+    const url: string = `http://localhost:8080/api/admin/secure/delete/book?bookId=${props.book.id}`;
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+        "Content-Type": "application/json",
+      },
+    };
+    const updateResponse = await fetch(url, requestOptions);
+    if (!updateResponse.ok) {
+      console.log("Error in deleting book");
+    }
+    // call the deleteBook function in ManageLibraryPage.tsx to update the state variable bookDelete --> this will call the useEffect in ManageLibraryPage.tsx to fetch the latest list of books (after deleting this book) and re-render the page with this updated list of books
+    // we don't want to setQuantity, and setRemaining to 0, because we want to delete the book card from the page, and not just set the quantity to 0
+    props.deleteBook();
+  }
   return (
     <div className="card mt-3 shadow p-3 mb-3 bg-body rounded">
       <div className="row g-0">
@@ -107,7 +126,9 @@ export const ChangeQuantityOfBook: React.FC<{
         </div>
         <div className="mt-3 col-md-1">
           <div className="d-flex justify-content-start">
-            <button className="m-1 btn btn-md btn-danger">Delete</button>
+            <button className="m-1 btn btn-md btn-danger" onClick={deleteBook}>
+              Delete
+            </button>
           </div>
         </div>
         <button

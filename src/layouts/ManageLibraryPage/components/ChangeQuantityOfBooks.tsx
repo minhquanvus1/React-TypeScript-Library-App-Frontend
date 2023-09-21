@@ -19,6 +19,9 @@ export const ChangeQuantityOfBooks = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [booksPerPage] = useState(5);
 
+  // bookDelete state
+  const [bookDelete, setBookDelete] = useState(false); // this is just a binary variable (only contains 2 states: true or false), and is used to trigger the useEffect below
+
   useEffect(() => {
     const fetchBooks = async () => {
       const url: string = `http://localhost:8080/api/books?page=${
@@ -61,7 +64,12 @@ export const ChangeQuantityOfBooks = () => {
       setIsLoading(false);
       setHttpError(error.message);
     });
-  }, [authState, currentPage]);
+  }, [authState, currentPage, bookDelete]);
+
+  // function to update the value of bookDelete state variable, this function will be passed to ChangeQuantityOfBook component, so that, when the delete button is clicked --> this will change the current state of bookDelete state variable, and trigger this useEffect to run again to fetch the latest/updated list of books (after deleting the book) --> the page is re-rendered with the updated list of books
+  const deleteBook = () => {
+    setBookDelete(!bookDelete);
+  };
 
   if (isLoading) {
     return <SpinnerLoading />;
@@ -95,7 +103,11 @@ export const ChangeQuantityOfBooks = () => {
           </p>
           {/* VERY BE CAREFUL with using {} (must use "return" keyword so that contents will be displayed on UI) in lieu of () (we don't need to use "return" keyword)  */}
           {books.map((book) => (
-            <ChangeQuantityOfBook key={book.id} book={book} />
+            <ChangeQuantityOfBook
+              key={book.id}
+              book={book}
+              deleteBook={deleteBook}
+            />
           ))}
         </>
       ) : (
