@@ -46,6 +46,14 @@ export const Navbar = () => {
                   </NavLink>
                 </li>
               )}
+              {authState.isAuthenticated &&
+                authState.accessToken?.claims.userType === "admin" && (
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/admin">
+                      Admin
+                    </NavLink>
+                  </li>
+                )}
             </ul>
             <ul className="navbar-nav ms-auto">
               {/* if user is NOT authenticated, then show Sign in button, else show
