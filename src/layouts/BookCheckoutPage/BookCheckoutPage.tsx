@@ -35,7 +35,7 @@ export const BookCheckoutPage = () => {
   const [isLoadingBookCheckedOut, setIsLoadingBookCheckedOut] = useState(true);
 
   // Payment states
-  const [displayError, setDisplayError] = useState(false);
+  const [displayError, setDisplayError] = useState(false); // this state is used to display the error message, basing on the status of payment process
 
   // create bookId variable, to get the bookId path parameter from the url
   const bookId = window.location.pathname.split("/")[2];
@@ -223,12 +223,19 @@ export const BookCheckoutPage = () => {
       },
     };
     const checkoutResponse = await fetch(url, requestOptions);
-    if (!checkoutResponse.ok) {
+    // use try-catch to catch runtime exception, when the backend throws exception (or else the app will crash)
+    try {
+      if (!checkoutResponse.ok) {
+        throw new Error("Something went wrong!");
+      }
+    } catch (error: any) {
+      console.log("Error: ", error.message);
       setDisplayError(true); // if the backend throws exception, then the "!checkoutResponse.ok" will be "true", and then "displayError" state variable is set to "true
-      throw new Error("Something went wrong!");
+      setIsCheckedOut(false);
     }
-    setDisplayError(false); // if the backend does not throw exception, then the "!checkoutResponse.ok" will be "false", and then "displayError" state variable is set to "false
-    setIsCheckedOut(true);
+
+    checkoutResponse.ok && setDisplayError(false); // if the backend does not throw exception, then the "!checkoutResponse.ok" will be "false", and then "displayError" state variable is set to "false
+    checkoutResponse.ok && setIsCheckedOut(true);
   }
 
   async function submitReview(starInput: number, reviewDescription: string) {
