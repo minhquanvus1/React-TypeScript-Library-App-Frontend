@@ -32,7 +32,7 @@ export const StarsReview: React.FC<{ rating: number; size: number }> = (
   let halfStars: number = 0; // initialize halfStars = 0
   let emptyStars: number = 0; // initialize emptyStars = 0
   // neu fullStars (da dc lam tron xuong) < rating (4 < 4.5) --> co 1 halfStar
-  if (rating != undefined && rating > 0 && rating <= 5) {
+  if (rating !== undefined && rating > 0 && rating <= 5) {
     if (fullStars < rating) {
       halfStars = 1;
     }

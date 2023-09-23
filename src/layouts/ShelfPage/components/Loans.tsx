@@ -1,7 +1,6 @@
 import { useOktaAuth } from "@okta/okta-react";
 import { useEffect, useState } from "react";
 import { ShelfCurrentLoans } from "../../../models/ShelfCurrentLoans";
-import { error } from "console";
 import { SpinnerLoading } from "../../utils/SpinnerLoading";
 import { Link } from "react-router-dom";
 import { LoansModal } from "./LoansModal";
