@@ -15,6 +15,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <BrowserRouter>
+    {/* this allow React Components to interact with Stripe API */}
     <Elements stripe={stripePromise}>
       <App />
     </Elements>
